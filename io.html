@@ -10,18 +10,34 @@
 </head>
 
 <body>
-    <div>11111</div>
+    <form action="">
+        <input type="text">
+        <button>发送</button>
+    </form>
+    <ul></ul>
 </body>
 <script>
-    console.log(222);
     const socket = io();
+    const form = document.querySelector('form')
+    const input = document.querySelector('input')
+    const ul = document.querySelector('ul')
     socket.on('connect', (socket) => {
         console.log('a user connected');
     });
-    socket.on('welcome', ({ msg }) => {
-        console.log(`get welcom msg:${msg}`);
+    form.addEventListener('submit',e=>{
+        e.preventDefault()
+        if (input.value) {
+            socket.emit('client_chat_message',input.value)
+            input.value=''
+        }
+    })
+    socket.on('server_chat_message', (msg) => {
+        console.log('get server msg,s%',msg)
+        const li = document.createElement('li')
+        li.textContent = msg;
+        ul.appendChild(li)
+
     });
-    socket.emit('client_msg', { msg: '疑是地上双' })
 </script>
 
 </html>

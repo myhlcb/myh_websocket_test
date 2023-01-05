@@ -7,12 +7,13 @@ const app = http.createServer(function(req, res) {
 });
 const io  = require('socket.io')(app)
 io.on('connection',server=>{
-    console.log('server connect')
+    console.log('client connect')
     server.emit('welcome',{
         msg:'床前明月光'
     })
-    server.on('client_msg',({msg})=>{
+    server.on('client_chat_message',(msg)=>{
        console.log(`get client msg:${msg}`)
+       io.emit('server_chat_message',msg) //这里要用io
     })
     server.on('disconnect',()=>{
         console.log('close')
